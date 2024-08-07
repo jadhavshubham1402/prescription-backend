@@ -4,17 +4,13 @@ const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const connectToDatabase = require("./database");
-const routes = require("./route/route");
+const routes = require("./routes/route");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
 app.use(express.json())
-
-app.get("/", (req, res) => {
-  res.json("prescription backend is Running");
-});
 
 connectToDatabase.then(() => {
   //health check routes

@@ -52,6 +52,8 @@ async function register(req, res) {
       throw Error("User already exist");
     }
 
+    req.body["profile"] = req.file.path;
+
     req.body.password = bcrypt.hashSync(req.body.password, 10);
 
     await createUser(req.body);
