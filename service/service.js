@@ -42,7 +42,7 @@ function getAllPrescription(filter, page, limit) {
 }
 
 function getOnePrescription(data) {
-  return Prescription.findOne(data);
+  return Prescription.findById(data);
 }
 
 function createPrescription(data) {

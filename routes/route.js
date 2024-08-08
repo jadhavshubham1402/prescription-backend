@@ -1,4 +1,4 @@
-const { register, loginUser, getAllUserData, getAllConsultantData, getAllPrescriptionData, getOneUserData, createOnePrescription, createOneConsultant, updateOnePrescription } = require("../controller/controller");
+const { register, loginUser, getAllUserData, getAllConsultantData, getAllPrescriptionData, getOneUserData, createOnePrescription, createOneConsultant, updateOnePrescription, getOnePrescriptionData } = require("../controller/controller");
 const multer = require("multer");
 const path = require("path");
 const fs = require('fs');
@@ -48,5 +48,7 @@ router.post("/getAllPrescription", authorize, getAllPrescriptionData);
 router.post("/createConsultant", authorize, createOneConsultant);
 router.post("/createPrescription", authorize, createOnePrescription);
 router.post("/updatePrescription", authorize, updateOnePrescription);
+router.post("/getOnePrescription", authorize, getOnePrescriptionData);
+
 
 module.exports = router;

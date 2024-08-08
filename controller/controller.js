@@ -9,6 +9,7 @@ const {
   createConsultant,
   createPrescription,
   updatePrescription,
+  getOnePrescription,
 } = require("../service/service");
 
 async function loginUser(req, res) {
@@ -185,6 +186,27 @@ async function getAllPrescriptionData(req, res) {
     res.status(404).send({ message: error.message });
   }
 }
+
+async function getOnePrescriptionData(req, res, next) {
+  try {
+    const id = req.body.id;
+    let userData = await getOnePrescription({
+      id,
+    }).lean();
+
+    if (!userData) {
+      throw Error("User not found");
+    }
+
+    res.json({
+      code: 200,
+      data: userData,
+    });
+  } catch (error) {
+    res.status(500).send({ message: error });
+  }
+}
+
 module.exports = {
   loginUser,
   register,
@@ -194,5 +216,6 @@ module.exports = {
   createOneConsultant,
   getAllPrescriptionData,
   createOnePrescription,
-  updateOnePrescription
+  updateOnePrescription,
+  getOnePrescriptionData,
 };
