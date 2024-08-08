@@ -2,9 +2,9 @@ const user = require("../model/user");
 const Consultant = require("../model/consultant");
 const Prescription = require("../model/prescription");
 
-function getAllUser(page, limit) {
+function getAllUser(filter, page, limit) {
   return user
-    .find()
+    .find(filter)
     .skip((page - 1) * limit)
     .limit(limit);
 }
@@ -21,8 +21,8 @@ function updateUser(filter, update, options = {}) {
   return user.findOneAndUpdate(filter, update, options);
 }
 
-function getAllConsultant(page, limit) {
-  return Consultant.find()
+function getAllConsultant(filter, page, limit) {
+  return Consultant.find(filter)
     .skip((page - 1) * limit)
     .limit(limit);
 }
@@ -31,12 +31,12 @@ function getOneConsultant(data) {
   return Consultant.findOne(data);
 }
 
-function createConsultant(userData) {
-  return Consultant.create(userData);
+function createConsultant(data) {
+  return Consultant.create(data);
 }
 
-function getAllPrescription(page, limit) {
-  return Prescription.find()
+function getAllPrescription(filter, page, limit) {
+  return Prescription.find(filter)
     .skip((page - 1) * limit)
     .limit(limit);
 }
@@ -45,8 +45,8 @@ function getOnePrescription(data) {
   return Prescription.findOne(data);
 }
 
-function createPrescription(userData) {
-  return Prescription.create(userData);
+function createPrescription(data) {
+  return Prescription.create(data);
 }
 
 function updatePrescription(filter, update, options = {}) {
