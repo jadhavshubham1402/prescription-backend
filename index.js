@@ -5,12 +5,15 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const connectToDatabase = require("./database");
 const routes = require("./routes/route");
+const path = require("path");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use(express.json())
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+app.use(express.json());
 
 connectToDatabase.then(() => {
   //health check routes

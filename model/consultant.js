@@ -8,7 +8,7 @@ const consultantSchema = new mongoose.Schema(
     },
     recentSurgery: {
       type: Date,
-      required: true,
+      required: false,
     },
     familyMedicalHistory: {
       type: String,
@@ -16,11 +16,11 @@ const consultantSchema = new mongoose.Schema(
     },
     anyAllergies: {
       type: String,
-      required: true,
+      required: false,
     },
     others: {
       type: String,
-      required: true,
+      required: false,
     },
     doctorId: {
       type: mongoose.Schema.Types.ObjectId,

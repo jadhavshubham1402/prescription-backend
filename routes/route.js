@@ -1,7 +1,19 @@
-const { register, loginUser, getAllUserData, getAllConsultantData, getAllPrescriptionData, getOneUserData, createOnePrescription, createOneConsultant, updateOnePrescription, getOnePrescriptionData } = require("../controller/controller");
+const {
+  register,
+  loginUser,
+  getAllUserData,
+  getAllConsultantData,
+  getAllPrescriptionData,
+  getOneUserData,
+  createOnePrescription,
+  createOneConsultant,
+  updateOnePrescription,
+  getOnePrescriptionData,
+} = require("../controller/controller");
 const multer = require("multer");
 const path = require("path");
-const fs = require('fs');
+const fs = require("fs");
+const express = require("express");
 const { authorize } = require("../middleware/auth");
 
 const router = require("express").Router();
@@ -42,13 +54,12 @@ const upload = multer({
 router.post("/register", upload.single("file"), register);
 router.post("/login", loginUser);
 router.post("/getAllUser", authorize, getAllUserData);
-router.get("/getOneUser", authorize, getOneUserData);
+router.post("/getOneUser", authorize, getOneUserData);
 router.post("/getAllConsultant", authorize, getAllConsultantData);
 router.post("/getAllPrescription", authorize, getAllPrescriptionData);
 router.post("/createConsultant", authorize, createOneConsultant);
 router.post("/createPrescription", authorize, createOnePrescription);
 router.post("/updatePrescription", authorize, updateOnePrescription);
 router.post("/getOnePrescription", authorize, getOnePrescriptionData);
-
 
 module.exports = router;

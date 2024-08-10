@@ -9,6 +9,10 @@ function getAllUser(filter, page, limit) {
     .limit(limit);
 }
 
+function getAllUsers(filter) {
+  return user.find(filter);
+}
+
 function getOneUser(data) {
   return user.findOne(data);
 }
@@ -42,7 +46,7 @@ function getAllPrescription(filter, page, limit) {
 }
 
 function getOnePrescription(data) {
-  return Prescription.findById(data);
+  return Prescription.findOne(data);
 }
 
 function createPrescription(data) {
@@ -55,6 +59,7 @@ function updatePrescription(filter, update, options = {}) {
 
 module.exports = {
   getAllUser,
+  getAllUsers,
   getOneUser,
   createUser,
   updateUser,

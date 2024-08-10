@@ -10,6 +10,7 @@ const {
   createPrescription,
   updatePrescription,
   getOnePrescription,
+  getAllUsers,
 } = require("../service/service");
 
 async function loginUser(req, res) {
@@ -63,7 +64,7 @@ async function register(req, res) {
       throw Error("User already exist");
     }
 
-    req.body["profile"] = req.file.path;
+    req.body["profile"] = req.file.path.replace(/\\/g, "/");
 
     req.body.password = bcrypt.hashSync(req.body.password, 10);
 
@@ -83,7 +84,7 @@ async function getAllUserData(req, res) {
   try {
     const page = parseInt(req.body.page) || 1;
     const limit = 10;
-    const filter = req.body.filter;
+    const filter = { type: req.body.type };
     const userData = await getAllUser(filter, page, limit);
     res.json({
       code: 200,
@@ -118,10 +119,38 @@ async function getAllConsultantData(req, res) {
     const page = parseInt(req.body.page) || 1;
     const limit = 10;
     const filter = req.body.filter;
-    const userData = await getAllConsultant(filter, page, limit);
+    const consultantData = await getAllConsultant(filter, page, limit);
+
+    const userId = consultantData.map((e) => e.patientId);
+
+    const userData = await getAllUsers({ _id: { $in: userId } });
+
+    let data = [];
+
+    for (const element of consultantData) {
+      userData.map((e) => {
+        console.log(e._id, element.patientId);
+        if (e._id.toString() == element.patientId.toString()) {
+          console.log("ererere", e);
+          data.push({
+            _id: element._id,
+            currentIllnessHistory: element.currentIllnessHistory,
+            recentSurgery: element.recentSurgery,
+            familyMedicalHistory: element.familyMedicalHistory,
+            anyAllergies: element.anyAllergies,
+            others: element.others,
+            doctorId: element.doctorId,
+            patientId: element.patientId,
+            patientName: e.name,
+            age: e.age,
+          });
+        }
+      });
+    }
+
     res.json({
       code: 200,
-      data: userData,
+      data: data,
     });
   } catch (error) {
     res.status(404).send({ message: error.message });
@@ -156,7 +185,7 @@ async function createOnePrescription(req, res) {
 
 async function updateOnePrescription(req, res) {
   try {
-    const filter = req.body.id;
+    const filter = { _id: req.body.id };
     const update = {
       careToBeTaken: req.body.careToBeTaken,
       medicines: req.body.medicines,
@@ -189,18 +218,26 @@ async function getAllPrescriptionData(req, res) {
 
 async function getOnePrescriptionData(req, res, next) {
   try {
-    const id = req.body.id;
-    let userData = await getOnePrescription({
-      id,
-    }).lean();
-
-    if (!userData) {
-      throw Error("User not found");
+    console.log(req.body, "sdigfsd");
+    let prescriptionData = await getOnePrescription(req.body);
+    if (!prescriptionData) {
+      return res.send({
+        code: 200,
+        data: prescriptionData,
+      });
     }
 
-    res.json({
+    let userData = await getOneUser({ _id: prescriptionData.doctorId });
+
+    let prescription = {
+      ...prescriptionData.toObject(),
+      doctorName: userData.name,
+      speciality: userData.speciality,
+    };
+
+    return res.json({
       code: 200,
-      data: userData,
+      data: prescription,
     });
   } catch (error) {
     res.status(500).send({ message: error });
